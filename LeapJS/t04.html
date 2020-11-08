@@ -1,0 +1,52 @@
+<html>
+  <head>
+    <title>Dumper - Leap</title>
+    <script src="../leap-0.6.4.js"></script>
+    <script>
+      var paused = false;
+      var wsServer = 'ws://192.168.1.102:5678'; //服务器地址
+      var websocket = new WebSocket(wsServer); //创建WebSocket对象
+      window.onkeypress = function(e) {
+        if (e.charCode == 32) {
+          if (paused == false) {
+            paused = true;
+          } else {
+            paused = false;
+          }
+        }
+      };
+      var yaw = 0
+      var controller = new Leap.Controller({enableGestures: true});
+      controller.loop(function(frame) {
+        latestFrame = frame;
+        if (paused) {
+          document.getElementById('pause').innerHTML = "<strong>PAUSED</strong>";
+          return;
+        }
+
+        var str = "";
+        for (var i in frame.handsMap) {
+          var hand = frame.handsMap[i];
+          yaw = hand.yaw();
+          str += "<p>" +
+            "<strong>Roll:</strong> " + hand.roll() +
+            "<br/><strong>Pitch:</strong> " + hand.pitch() +
+            "<br/><strong>Yaw:</strong> " + hand.yaw() +
+            "</p>";
+        }
+        console.log(str);
+        document.getElementById('yaw').innerHTML = yaw;
+        //document.getElementById('out').innerHTML = str;
+        // document.getElementById('yaw').innerHTML = yaw;
+      });
+      setInterval(function(){
+        websocket.send(yaw)
+      },500)
+    </script>
+  </head>
+  <body>
+    <div id="pause"></div>
+    <div id="out"></div>
+    <div id='yaw'></div>
+  </body>
+</html>

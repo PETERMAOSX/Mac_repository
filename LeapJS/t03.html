@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div>
+    <a href="javascript:WebSocketTest()">test</a>
+    <div id="test"></div>
+</div>
+<script>
+    var wsServer = 'ws://localhost:5678'; //服务器地址
+    var websocket = new WebSocket(wsServer); //创建WebSocket对象
+    var count = 0;
+    function WebSocketTest(){
+        websocket.send(count)
+        count++
+        // websocket.onopen = function (evt) {
+        //     console.log("create connection")
+        //     websocket.send("hello");
+        // };
+
+        // websocket.onclose = function (evt) {
+        //     console.log("close connection")
+        // };
+
+        // websocket.onmessage = function (evt) {
+        //     console.log("receive: ",evt.data)
+        // };
+
+        // websocket.onerror = function (evt) {
+        //     console.log("error: ",evt.data)
+        // };
+    }
+    document.getElementById('test').innerHTML = count;
+</script>
+</body>
+</html>
